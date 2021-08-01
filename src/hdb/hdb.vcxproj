@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A0334553-512A-4900-832D-1827FB65AC50}</ProjectGuid>
+    <RootNamespace>db</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Release/db.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeaderOutputFile>.\Release/db.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Release/hdb.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib;libcd.lib;libcmtd.lib;msvcrtd.lib libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ProgramDatabaseFile>.\Release/hdb.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/db.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TypeLibraryName>.\Release/db.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/db.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Debug/db.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/db.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TypeLibraryName>.\Debug/db.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_MSVC_LANG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/db.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="DAggr.cpp" />
+    <ClCompile Include="DALTERQuery.cpp" />
+    <ClCompile Include="DArray.cpp" />
+    <ClCompile Include="db.cpp" />
+    <ClCompile Include="DConditionalQuery.cpp" />
+    <ClCompile Include="DCreateQuery.cpp" />
+    <ClCompile Include="DData.cpp" />
+    <ClCompile Include="DDataArray.cpp" />
+    <ClCompile Include="DDatrix.cpp" />
+    <ClCompile Include="DDDLQuery.cpp" />
+    <ClCompile Include="DDeleteQuery.cpp" />
+    <ClCompile Include="DDESCQuery.cpp" />
+    <ClCompile Include="DDMLQuery.cpp" />
+    <ClCompile Include="DDropQuery.cpp" />
+    <ClCompile Include="DError.cpp" />
+    <ClCompile Include="DExpr.cpp" />
+    <ClCompile Include="DGrouperStreamDatrix.cpp" />
+    <ClCompile Include="DIndex.cpp" />
+    <ClCompile Include="DInsertQuery.cpp" />
+    <ClCompile Include="DMemDatrix.cpp" />
+    <ClCompile Include="DQuery.cpp" />
+    <ClCompile Include="DQueryFactory.cpp" />
+    <ClCompile Include="DReadableDatrix.cpp" />
+    <ClCompile Include="DResult.cpp" />
+    <ClCompile Include="DRow.cpp" />
+    <ClCompile Include="DSchema.cpp" />
+    <ClCompile Include="DSchemaArray.cpp" />
+    <ClCompile Include="DSelectQuery.cpp" />
+    <ClCompile Include="DSession.cpp" />
+    <ClCompile Include="DSorterStreamDatrix.cpp" />
+    <ClCompile Include="DStack.cpp" />
+    <ClCompile Include="DStreamDatrix.cpp" />
+    <ClCompile Include="DTable.cpp" />
+    <ClCompile Include="DTableDatrix.cpp" />
+    <ClCompile Include="DUpdateQuery.cpp" />
+    <ClCompile Include="DVar.cpp" />
+    <ClCompile Include="DVariable.cpp" />
+    <ClCompile Include="DView.cpp" />
+    <ClCompile Include="DViewDatrix.cpp" />
+    <ClCompile Include="DWriteableDatrix.cpp" />
+    <ClCompile Include="hdbio.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="service.cpp" />
+    <ClCompile Include="sql.cpp" />
+    <ClCompile Include="token.cpp" />
+    <ClCompile Include="where.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DAggr.h" />
+    <ClInclude Include="DALTERQuery.h" />
+    <ClInclude Include="DArray.h" />
+    <ClInclude Include="db.h" />
+    <ClInclude Include="DConditionalQuery.h" />
+    <ClInclude Include="DCreateQuery.h" />
+    <ClInclude Include="DData.h" />
+    <ClInclude Include="DDataArray.h" />
+    <ClInclude Include="DDatrix.h" />
+    <ClInclude Include="DDDLQuery.h" />
+    <ClInclude Include="DDeleteQuery.h" />
+    <ClInclude Include="DDESCQuery.h" />
+    <ClInclude Include="DDmlQuery.h" />
+    <ClInclude Include="DDropQuery.h" />
+    <ClInclude Include="DError.h" />
+    <ClInclude Include="DExpr.h" />
+    <ClInclude Include="DGrouperStreamDatrix.h" />
+    <ClInclude Include="DIndex.h" />
+    <ClInclude Include="DInsertQuery.h" />
+    <ClInclude Include="DMemDatrix.h" />
+    <ClInclude Include="DQuery.h" />
+    <ClInclude Include="DQueryFactory.h" />
+    <ClInclude Include="DReadableDatrix.h" />
+    <ClInclude Include="DResult.h" />
+    <ClInclude Include="DRow.h" />
+    <ClInclude Include="DSchema.h" />
+    <ClInclude Include="DSchemaArray.h" />
+    <ClInclude Include="DSelectQuery.h" />
+    <ClInclude Include="DSession.h" />
+    <ClInclude Include="DSorterStreamDatrix.h" />
+    <ClInclude Include="DStack.h" />
+    <ClInclude Include="DStreamDatrix.h" />
+    <ClInclude Include="DTable.h" />
+    <ClInclude Include="DTableDatrix.h" />
+    <ClInclude Include="DUpdateQuery.h" />
+    <ClInclude Include="DVar.h" />
+    <ClInclude Include="DVariable.h" />
+    <ClInclude Include="DView.h" />
+    <ClInclude Include="DViewDatrix.h" />
+    <ClInclude Include="DWriteableDatrix.h" />
+    <ClInclude Include="hdbio.h" />
+    <ClInclude Include="perser.h" />
+    <ClInclude Include="service.H" />
+    <ClInclude Include="sort.h" />
+    <ClInclude Include="sql.h" />
+    <ClInclude Include="token.h" />
+    <ClInclude Include="where.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
