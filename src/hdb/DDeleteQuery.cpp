@@ -64,7 +64,8 @@ int DDELETEQuery::Parse()
 
 int DDELETEQuery::Execute()
 {
-	int i, match, res = 0, retcd = true;
+	int i, res = 0, retcd = true;
+	bool match = false;
 	//DResult * result=NULL;
 	//DDMLQuery * dq=NULL;
 	DVariable * wcval = NULL;
@@ -96,9 +97,11 @@ int DDELETEQuery::Execute()
 		{
 			wcval = m_pWhereExpr->Evaluate(&retcd);
 			if (retcd < 0) HDB_RETURN(retcd);
-			if (wcval->m_numval == 1) match = 1; else match = 0;
+			match = (wcval->m_numval == 1);
 		}
-		else match = 1;
+		else
+			match = true;
+
 		if (match)
 		{
 			m_paTable[0]->DeleteRecord();

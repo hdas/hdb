@@ -274,9 +274,7 @@
     <ClInclude Include="DViewDatrix.h" />
     <ClInclude Include="DWriteableDatrix.h" />
     <ClInclude Include="hdbio.h" />
-    <ClInclude Include="perser.h" />
     <ClInclude Include="service.H" />
-    <ClInclude Include="sort.h" />
     <ClInclude Include="sql.h" />
     <ClInclude Include="token.h" />
     <ClInclude Include="where.h" />

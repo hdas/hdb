@@ -45,7 +45,7 @@ DConditionalQuery::~DConditionalQuery()
 //
 int DConditionalQuery::ParseCondition(int st_where, int nd_where)
 {
-	int tmp_lt;
+	int tmp_lt = 0;
 	int res = FAILURE;
 
 	if (st_where == 0) {
@@ -58,12 +58,12 @@ int DConditionalQuery::ParseCondition(int st_where, int nd_where)
 		m_nWhereExpr = 1;
 		for (int tn = st_where; tn < m_tokens.size(); tn++)
 		{
-			// to re-write for function support; beacause it may contains ","
+			//TODO: re-write for function support; beacause it may contains ","
 			if (EQUAL(m_tokens[tn], ",") || EQUAL(m_tokens[tn], ";") || EQUAL(m_tokens[tn], ""))
 			{
-				tmp_lt = tn - 1;
 				break;
 			}
+			tmp_lt = tn;
 		}
 
 		m_pWhereExpr = new DExpr(m_paTable, m_nTable);
