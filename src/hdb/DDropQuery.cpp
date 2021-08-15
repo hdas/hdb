@@ -41,16 +41,16 @@ int DDROPQuery::Execute()
 
 	if (qry->GetResult()->m_errcd != TRUE)
 	{
-		delete qry;
 		m_errcd = m_result->m_errcd = qry->GetResult()->m_errcd;
+		delete qry;
 		return FALSE;
 	}
 	else
 	{
 		if (qry->GetResult()->m_nRow < 1)
 		{
-			delete qry;
 			m_errcd = m_result->m_errcd = qry->GetResult()->m_errcd;
+			delete qry;
 			return FALSE;
 		}
 	}
