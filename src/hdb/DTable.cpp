@@ -277,7 +277,7 @@ int DTable::Lock()
 {
 	while ((m_Locked == true) || (m_LockId > 0))
 	{
-
+		Sleep(20);
 	}
 	m_Locked = true;
 	m_LockId = m_pSsn->Lock(this);

@@ -48,8 +48,10 @@ int DConditionalQuery::ParseCondition(int st_where, int nd_where)
 	int tmp_lt;
 	int res = FAILURE;
 
-	if (st_where == 0)
-		while (!EQUAL(m_stl[st_where], "WHERE")) st_where++;
+	if (st_where == 0) {
+		while (!EQUAL(m_tokens[st_where], "WHERE")) st_where++;
+		st_where++;
+	}
 
 	if (st_where > 0)
 	{

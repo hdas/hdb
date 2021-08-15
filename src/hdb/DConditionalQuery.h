@@ -15,7 +15,7 @@ class DConditionalQuery : public DQuery
 public:
 	int OpenTableList(int startTokenTable);
 	int ParseTableList();
-	int ParseCondition(int st_where = 0, int nd_where = 0);
+	int ParseCondition(int st_where, int nd_where = 0);
 	DConditionalQuery(DSession *ssn, char * sql);
 	virtual ~DConditionalQuery();
 

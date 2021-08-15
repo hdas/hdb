@@ -22,38 +22,41 @@ DDELETEQuery::~DDELETEQuery()
 
 int DDELETEQuery::Parse()
 {
-	int retcd, st_var, tn;
+	int retcd, st_where=0, tn;
 
 
-	if (!EQUAL(m_stl[1], "FROM"))
+	if (!EQUAL(m_tokens[1], "FROM"))
 	{
 		m_errcd = ERR_BADSQL;
 		return FALSE;
 	}
 
+	
+
 	// Determine the Number of Tables
-	st_var = 0;
 	m_nTable = 0;
 	for (tn = 2; tn < m_nToken; tn++)
 	{
-		if (EQUAL(m_stl[tn], "WHERE"))
+		if (EQUAL(m_tokens[tn], "WHERE"))
 		{
 			m_nTable++;
-			retcd = DConditionalQuery::ParseCondition(tn);
+			st_where = tn + 1;
 			break;
 		}
-		if (EQUAL(m_stl[tn], ""))
+		if (EQUAL(m_tokens[tn], ""))
 		{
 			m_errcd = ERR_BADSQL;
 			return FALSE;
 		}
-		if (EQUAL(m_stl[tn], ",")) m_nTable++;
-		if (EQUAL(m_stl[tn], ";")){ m_nTable++; break; }
+		if (EQUAL(m_tokens[tn], ",")) m_nTable++;
+		if (EQUAL(m_tokens[tn], ";")){ m_nTable++; break; }
 	}
 
 	if (this->OpenTableList(2) == SUCCESS)
 	{
-		m_bParsed = TRUE;
+		retcd = DConditionalQuery::ParseCondition(st_where);
+		if(retcd == SUCCESS)
+			m_bParsed = TRUE;
 	}
 
 	return m_bParsed;
