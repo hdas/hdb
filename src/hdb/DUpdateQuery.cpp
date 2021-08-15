@@ -42,10 +42,10 @@ int DUPDATEQuery::Parse()
 	m_nVarToSet = 0;
 	for (tn = st_var; tn < m_nToken; tn++)
 	{
-		if (EQUAL(m_stl[tn], "WHERE"))
+		if (EQUAL(m_tokens[tn], "WHERE"))
 		{
 			m_nVarToSet++;
-			DConditionalQuery::ParseCondition(tn);
+			DConditionalQuery::ParseCondition(tn+1);
 			break;
 		}
 		if (EQUAL(m_tokens[tn], ",")) m_nVarToSet++; // To re-write for function support
