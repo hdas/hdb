@@ -11,7 +11,7 @@ class DVariable
 {
 public:
 	char m_DataType;
-	char m_VarClass;
+	VarClass m_VarClass;
 	// don't do following unsigned; some time it used to store direct return from function; 
 	// so it may contain the error_code also
 	int m_ref1; // may contains field_code

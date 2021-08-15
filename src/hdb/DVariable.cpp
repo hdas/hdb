@@ -15,7 +15,7 @@ DVariable::DVariable()
 {
 	m_DataType = DT_UNKNOWN;
 	m_strval = NULL;
-	m_VarClass = VCLS_VALUE;
+	m_VarClass = VarClass::Value;
 	m_numval = 0;
 	m_ref1 = 0;
 	m_ref2 = 0;
@@ -58,7 +58,7 @@ char * DVariable::GetStringValue()
 	char * str;
 	HDB_ASSERT(this);
 
-	HDB_ASSERT(!(m_VarClass != VCLS_VALUE && m_VarClass != VCLS_FIELD));
+	HDB_ASSERT(!(m_VarClass != VarClass::Value && m_VarClass != VarClass::Field));
 	//if(var->m_VarClass != VCLS_VALUE && var->m_VarClass != VCLS_FIELD ) return NULL;
 
 	//chop39(var->m_strval);
@@ -210,7 +210,7 @@ DVariable * DVariable::CreateFieldVariable(char * pFieldName, DTable **paTables,
 	if (tblidx >= 0) // i.e. Field Matched
 	{
 		vv = new DVariable(); //dCreateVariable(&res);
-		vv->m_VarClass = VCLS_FIELD;
+		vv->m_VarClass = VarClass::Field;
 		vv->m_DataType = paTables[tblidx]->GetTagField(fc)->m_field_type;
 		vv->m_ref1 = fc;
 		vv->m_ref2 = tblidx;

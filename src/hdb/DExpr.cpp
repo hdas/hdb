@@ -74,7 +74,7 @@ int DExpr::Create(std::vector<char*> &tokens, int startTokenIdx, int endTokenIdx
 		}
 		else
 		{
-			if (m_pExprStack->m_link->m_pVar->m_VarClass == VCLS_VALUE)
+			if (m_pExprStack->m_link->m_pVar->m_VarClass == VarClass::Value)
 			{
 				if (m_pExprStack->m_link->m_pVar->m_DataType == DT_CHAR)
 				{
@@ -245,7 +245,9 @@ DVariable * DExpr::PerformOparation(DVariable *vop1, DVariable *vop2, int oprtr,
 
 	HDB_ASSERT(vop1 != NULL);
 
-	if (vop1->m_VarClass != VCLS_VALUE && vop1->m_VarClass != VCLS_FIELD) HDB_RETURN(ERR_BADEXPR);
+	if (vop1->m_VarClass != VarClass::Value && vop1->m_VarClass != VarClass::Field)
+		HDB_RETURN(ERR_BADEXPR);
+	
 	// Change to common/generic datatype
 	if (vop1->m_DataType == DT_VARCHAR) vop1->m_DataType = DT_CHAR;
 
@@ -257,10 +259,14 @@ DVariable * DExpr::PerformOparation(DVariable *vop1, DVariable *vop2, int oprtr,
 	else
 	{
 		HDB_ASSERT(vop2 != NULL);
-		if (vop2->m_VarClass != VCLS_VALUE && vop2->m_VarClass != VCLS_FIELD) HDB_RETURN(ERR_BADEXPR);
+		if (vop2->m_VarClass != VarClass::Value && vop2->m_VarClass != VarClass::Field)
+			HDB_RETURN(ERR_BADEXPR);
 
-		if (vop2->m_DataType == DT_VARCHAR) vop2->m_DataType = DT_CHAR;
-		if (vop1->m_DataType != vop2->m_DataType) HDB_RETURN(ERR_DATATYPEMISMATCH);
+		if (vop2->m_DataType == DT_VARCHAR)
+			vop2->m_DataType = DT_CHAR;
+
+		if (vop1->m_DataType != vop2->m_DataType)
+			HDB_RETURN(ERR_DATATYPEMISMATCH);
 	}
 
 
