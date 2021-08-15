@@ -278,7 +278,18 @@ typedef int BOOL;
 #define VCLS_AGGR        'A'
 #define VCLS_PARAM       'P'
 #define VCLS_DATATYPE    'D'
-#define VCLS_RESERVEWORD 'R' 
+#define VCLS_RESERVEWORD 'R'
+
+enum VarClass {
+	Operator = VCLS_OPARATOR,
+	Value = VCLS_VALUE,
+	Field = VCLS_FIELD,
+	Function = VCLS_FUNCTION,
+	Aggregate = VCLS_AGGR,
+	Param = VCLS_PARAM,
+	Datatype = VCLS_DATATYPE,
+	ReservedWord = VCLS_RESERVEWORD
+};
 
 
 // Record Status ; stored as flag of each record

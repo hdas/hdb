@@ -180,26 +180,36 @@ DResult * ExecuteSql(DSession * ssn, char * sql)
 	DResult * result = NULL;
 	DQuery * qry = NULL;
 
-	qry = DQueryFactory::CreateQuery(ssn, sql);
+	try {
 
-	if (qry == NULL) // if Not any one of upper
-	{
-		result = new DResult();
-		result->m_errcd = ERR_BADSQL;
+		qry = DQueryFactory::CreateQuery(ssn, sql);
+
+		if (qry == NULL) // if Not any one of upper
+		{
+			result = new DResult();
+			result->m_errcd = ERR_BADSQL;
+		}
+		else
+		{
+			if (qry->Parse())
+				qry->Execute();
+
+			result = qry->CreateResult();
+
+			delete qry;
+		}
+
+		// Filling the error message
+		// The code is replaced at different place for Stack Overflow
+
 	}
-	else
-	{
-		if (qry->Parse())
-			qry->Execute();
-
-		result = qry->CreateResult();
-
-		delete qry;
+	catch (exception ex) {
+		if (result == NULL)
+		{
+			result = new DResult();
+		}
+		strcpy_s(result->m_errmsg, 256, ex.what());
 	}
-
-	// Filling the error message
-	// The code is replaced at different place for Stack Overflow
-
 
 	return result;
 }

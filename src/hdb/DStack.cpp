@@ -84,8 +84,8 @@ int DStack::PopulatePostfix(std::vector<char*> &tokens, DStack *pftlist, int st,
 		if (!oprtr) // Beacause oprtr is boolean (char); it returns false if bad oparator
 		{
 			cvar->Store(tokens[ti], DT_UNKNOWN); //dStoreVariable(cvar, DT_UNKNOWN, stl[ti]);
-			cvar->m_VarClass = isValue(tokens[ti]) ? VCLS_VALUE : VCLS_FIELD;
-			if (cvar->m_VarClass == VCLS_VALUE)
+			cvar->m_VarClass = isValue(tokens[ti]) ? VarClass::Value : VarClass::Field;
+			if (cvar->m_VarClass == VarClass::Value)
 			{
 				if (tokens[ti][0] == 39)
 					cvar->ConvertTo(DT_CHAR); //dChangeVariableDatatype(cvar, DT_CHAR);
@@ -107,12 +107,15 @@ int DStack::PopulatePostfix(std::vector<char*> &tokens, DStack *pftlist, int st,
 						break;
 					}
 				}
-				if (cvar->m_ref1 < 0) HDB_RETURN(ERR_BADFIELD);
+				if (cvar->m_ref1 < 0) {
+					throw std::invalid_argument("Unknown field.");
+					// HDB_RETURN(ERR_BADFIELD);
+				}
 			}
 		}
 		else
 		{
-			cvar->m_VarClass = VCLS_OPARATOR;
+			cvar->m_VarClass = VarClass::Operator;
 			cvar->m_ref1 = oprtr;
 			if (ti == st)
 			{

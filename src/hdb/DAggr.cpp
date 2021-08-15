@@ -87,7 +87,6 @@ int DAggr::ProcessAggr(DTable **paTable, int nTable)
 	double numval = 0;
 	DVariable * var = NULL;
 
-
 	if (m_aggr_code == AGGR_COUNT)
 	{
 		m_numval += 1;
@@ -96,13 +95,13 @@ int DAggr::ProcessAggr(DTable **paTable, int nTable)
 	{
 		var = m_pExpr->Evaluate(&lretcd);
 		HDB_ASSERT(var != NULL);
-		if (var->m_VarClass == VCLS_VALUE && var->m_DataType == DT_NUMBER)
+		if (var->m_VarClass == VarClass::Value && var->m_DataType == DT_NUMBER)
 		{
 			HDB_ASSERT(var->m_strval != NULL);
 			numval = atof(var->m_strval);
 			m_datatype = DT_NUMBER;
 		}
-		else if (var->m_VarClass == VCLS_VALUE && (var->m_DataType == DT_CHAR || var->m_DataType == DT_VARCHAR))
+		else if (var->m_VarClass == VarClass::Value && (var->m_DataType == DT_CHAR || var->m_DataType == DT_VARCHAR))
 		{
 			HDB_ASSERT(var->m_strval != NULL);
 			//var->strval
