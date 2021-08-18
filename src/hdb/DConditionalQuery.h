@@ -9,6 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 #include "DQuery.h"
+#include <vector>
 
 class DConditionalQuery : public DQuery
 {
@@ -23,8 +24,8 @@ public:
 	virtual int Execute() = 0;
 
 protected:
-	unsigned short m_nTable; // Number of element in paTable
-	DTable ** m_paTable;
+	//unsigned short m_nTable; // Number of element in paTable
+	std::vector<DTable *> m_paTable;
 
 	unsigned short m_nWhereExpr; // Number of Where Expr; its values is either 0 or 1
 	DExpr * m_pWhereExpr; // Address of the Where Expression; 1 element

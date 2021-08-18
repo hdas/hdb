@@ -49,6 +49,9 @@ int DTable::Open()
 	m_fp = fopen(fname, "rb+");
 	if (m_fp == NULL)
 	{
+		std::string msg("Can not open table: ");
+		msg.append(m_tablename);
+		throw std::exception(msg.c_str(), ERR_BADTABLE);
 		return FAILURE;
 	}
 

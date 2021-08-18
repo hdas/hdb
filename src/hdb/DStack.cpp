@@ -68,7 +68,7 @@ DVariable * DStack::Pop()
 	return pVar;
 }
 
-int DStack::PopulatePostfix(std::vector<char*> &tokens, DStack *pftlist, int st, int lt, DTable **paTable, int nTable)
+int DStack::PopulatePostfix(std::vector<char*> &tokens, DStack *pftlist, int st, int lt, std::vector<DTable *> &paTable)
 {
 	DVariable * cvar = NULL, *tpvar = NULL;
 	int oprtr, retcd = false;
@@ -96,7 +96,7 @@ int DStack::PopulatePostfix(std::vector<char*> &tokens, DStack *pftlist, int st,
 			{
 				int ti = 0;
 				cvar->m_ref1 = -1;
-				for (ti = 0; ti < nTable; ti++)
+				for (ti = 0; ti < paTable.size(); ti++)
 				{
 					cvar->m_ref1 = paTable[ti]->FieldCode(cvar->m_strval);
 					//if(cvar->ref1<0) HDB_RETURN(cvar->ref1); // don't do it here
@@ -108,7 +108,9 @@ int DStack::PopulatePostfix(std::vector<char*> &tokens, DStack *pftlist, int st,
 					}
 				}
 				if (cvar->m_ref1 < 0) {
-					throw std::invalid_argument("Unknown field.");
+					std::string msg("Unknown field: ");
+					msg.append(cvar->m_strval);
+					throw std::invalid_argument(msg);
 					// HDB_RETURN(ERR_BADFIELD);
 				}
 			}
@@ -155,8 +157,8 @@ int DStack::PopulatePostfix(std::vector<char*> &tokens, DStack *pftlist, int st,
 					if (tmpstack->m_errcd != SUCCESS)
 						break;
 				}
-				if (tmpstack->m_errcd != SUCCESS)
-					tmpstack->Push(tpvar);// push again tptkn ind free it
+				if (tmpstack->m_errcd != SUCCESS && tpvar != NULL)
+					tmpstack->Push(tpvar); // push again tptkn ind free it
 			}
 			tmpstack->Push(cvar, FALSE);
 			cvar = NULL;

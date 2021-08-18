@@ -81,9 +81,9 @@ int DAggr::CreateAggr(char *aggr_name, DExpr *the_expr_in_aggr, int *retcd)
 	return SUCCESS;
 }
 
-int DAggr::ProcessAggr(DTable **paTable, int nTable)
+int DAggr::ProcessAggr(std::vector<DTable *> &paTable)
 {
-	int lretcd, intVal = 0;
+	int intVal = 0;
 	double numval = 0;
 	DVariable * var = NULL;
 
@@ -93,7 +93,7 @@ int DAggr::ProcessAggr(DTable **paTable, int nTable)
 	}
 	else
 	{
-		var = m_pExpr->Evaluate(&lretcd);
+		var = m_pExpr->Evaluate(paTable);
 		HDB_ASSERT(var != NULL);
 		if (var->m_VarClass == VarClass::Value && var->m_DataType == DT_NUMBER)
 		{

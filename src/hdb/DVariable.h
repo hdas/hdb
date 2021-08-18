@@ -30,7 +30,7 @@ public:
 	//static DVariable * eval_pf(DStack * pftlist, int *pRetCd);
 	//static DVariable * eval_with_table(DExpr * the_expr_to_eval, DTable ** paTable, int nTable, int *pRetCd);
 	//static DVariable * eval(char * stl[], int st, int lt, int *pRetCd);
-	static DVariable * DVariable::CreateFieldVariable(char * pFieldName, DTable **paTables, int nTables, int *pRetcd);
+	static DVariable * DVariable::CreateFieldVariable(char * pFieldName, std::vector<DTable *> &paTables);
 
 
 	int Store(char * strval, int DataType);

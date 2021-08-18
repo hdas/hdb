@@ -22,21 +22,19 @@ private:
 	unsigned short m_length;
 	unsigned short m_nAggr;
 	DStack * m_pExprStack;
-	DTable ** m_paTable;
 	int m_nTable;
-	DVariable * EvalPostfix(DStack * pftlist, int * pRetCd);
+	DVariable * EvalPostfix(DStack * pftlist);
+	int Create(std::vector<DTable *> &paTable, std::vector<char*> &tokens, std::pair<short, short> &range);
 
 public:
-
 	static DVariable * PerformOparation(DVariable *vop1, DVariable *vop2, int oprtr, int * pRetCd);
 
-	DExpr(DTable ** paTable, int nTable);
-	int GetLength();
-	char * GetCaption();
-	int Create(std::vector<char*> &tokens, int startTokenIdx, int endTokenIdx);
+	DExpr(std::vector<DTable *> &paTable, std::vector<char*> &tokens, std::pair<short, short> &range);
 	virtual ~DExpr();
 
-	DVariable * Evaluate(int * pRetCd);
+	int GetLength();
+	char * GetCaption();
+	DVariable * Evaluate(std::vector<DTable *> &paTable);
 };
 
 #endif // !defined(AFX_DEXPR_H__6B9F3861_09AE_43C1_ACEA_9C6E691BAE7D__INCLUDED_)
