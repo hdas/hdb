@@ -10,7 +10,6 @@
 #endif // _MSC_VER > 1000
 
 #include "DConditionalQuery.h"
-#include <vector>
 
 using namespace std;
 
@@ -21,7 +20,7 @@ private:
 	DSELECTQuery(DSession *ssn, char * sql);
 	virtual ~DSELECTQuery();
 
-	int ComputeExprArray_Caption_And_Length(DExpr * expr_arr, int nCol, DTable * tbl, int nTbl);
+	int ComputeExprArray_Caption_And_Length(DExpr * expr_arr, int nCol, DTable * tbl);
 	int DetermineExprArrayForAggr(DExpr * expr_arr, int nExpr);
 
 
@@ -30,7 +29,7 @@ public:
 	int Execute();
 
 private:
-	unsigned short m_nOutExpr; // Number of element in paExpr
+	//unsigned short m_nOutExpr; // Number of element in paExpr
 	
 	//DExpr ** m_paOutExpr; // Address of the Array of output Expression
 	std::vector<DExpr *> m_paOutExpr;

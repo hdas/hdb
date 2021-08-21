@@ -192,12 +192,12 @@ return pVar;
 
 
 
-DVariable * DVariable::CreateFieldVariable(char * pFieldName, DTable **paTables, int nTables, int *pRetcd)
+DVariable * DVariable::CreateFieldVariable(char * pFieldName, std::vector<DTable *> &paTables)
 {
 	DVariable * vv = NULL;
 	int i, tblidx = -1, fc = -1;
 
-	for (i = 0; i < nTables; i++)
+	for (i = 0; i < paTables.size(); i++)
 	{
 		fc = paTables[i]->FieldCode(pFieldName);
 		if (fc >= 0)
@@ -214,11 +214,10 @@ DVariable * DVariable::CreateFieldVariable(char * pFieldName, DTable **paTables,
 		vv->m_DataType = paTables[tblidx]->GetTagField(fc)->m_field_type;
 		vv->m_ref1 = fc;
 		vv->m_ref2 = tblidx;
-		*pRetcd = 1;
 	}
 	else
 	{
-		*pRetcd = ERR_BADFIELD;
+		throw std::exception("Bad field");
 	}
 
 	return vv;

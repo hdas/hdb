@@ -9,14 +9,18 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-DExpr::DExpr(DTable ** paTable, int nTable)
+DExpr::DExpr(std::vector<DTable *> &paTable, std::vector<char*> &tokens, std::pair<short, short> &range)
 {
 	this->m_pExprStack = NULL;
 	this->m_caption = NULL;
 	this->m_length = 0;
 	this->m_nAggr = 0;
-	this->m_paTable = paTable;
-	this->m_nTable = nTable;
+	//this->m_paTable = paTable;
+	//this->m_nTable = nTable;
+	int res = this->Create(paTable, tokens, range);
+	if (res != SUCCESS) {
+		throw std::exception("Error parsing expression", res);
+	}
 }
 
 char * DExpr::GetCaption()
@@ -29,14 +33,17 @@ int DExpr::GetLength()
 	return m_length;
 }
 
-int DExpr::Create(std::vector<char*> &tokens, int startTokenIdx, int endTokenIdx)
+int DExpr::Create(std::vector<DTable *> &paTable, std::vector<char*> &tokens, std::pair<short, short> &range)
 {
 	DExpr * expr = NULL;
 	int retcd = true, res;
 	DStack * rvstk = new DStack(), *pfstk = new DStack();
 	DVariable * pVar = NULL;
 
-	res = pfstk->PopulatePostfix(tokens, pfstk, startTokenIdx, endTokenIdx, m_paTable, m_nTable);
+	auto startTokenIdx = range.first;
+	auto endTokenIdx = range.second;
+
+	res = pfstk->PopulatePostfix(tokens, pfstk, startTokenIdx, endTokenIdx, paTable);
 	if (res != SUCCESS)
 	{
 		HDB_RETURN(res);
@@ -70,7 +77,7 @@ int DExpr::Create(std::vector<char*> &tokens, int startTokenIdx, int endTokenIdx
 	{
 		if (m_pExprStack->m_link->m_pVar->m_VarClass == VCLS_FIELD)
 		{
-			m_length = m_paTable[m_pExprStack->m_link->m_pVar->m_ref2]->GetTagField(m_pExprStack->m_link->m_pVar->m_ref1)->m_field_length;
+			m_length = paTable[m_pExprStack->m_link->m_pVar->m_ref2]->GetTagField(m_pExprStack->m_link->m_pVar->m_ref1)->m_field_length;
 		}
 		else
 		{
@@ -105,9 +112,9 @@ DExpr::~DExpr()
 }
 
 
-DVariable * DExpr::Evaluate(int * pRetCd)
+DVariable * DExpr::Evaluate(std::vector<DTable *> &paTable)
 {
-	int res = FALSE, retcd = TRUE; //, fld_typ;
+	int res = FALSE;//, fld_typ;
 	DVariable * pVar = NULL;
 	DStack * tmplink = NULL;
 
@@ -129,8 +136,10 @@ DVariable * DExpr::Evaluate(int * pRetCd)
 			if (pVar->m_strval != NULL) free(pVar->m_strval);
 			typ = pVar->m_DataType; // backup; storing
 			pVar->m_DataType = DT_UNKNOWN;
-			pVar->m_strval = m_paTable[pVar->m_ref2]->FetchField(pVar->m_ref1, &res);
-			if (res != 1) HDB_RETURN(res);
+			pVar->m_strval = paTable[pVar->m_ref2]->FetchField(pVar->m_ref1, &res);
+			if (res != 1) {
+				throw std::exception("Error reading field from table", res);
+			}
 			pVar->ConvertTo(typ); //dChangeVariableDatatype(pVar, typ); 
 		}
 	}
@@ -145,16 +154,13 @@ DVariable * DExpr::Evaluate(int * pRetCd)
 	}
 	else
 	{
-		pVar = this->EvalPostfix(this->m_pExprStack, &retcd);
+		pVar = this->EvalPostfix(this->m_pExprStack);
 	}
 
-CLEANUP:
-	*pRetCd = retcd;
 	return pVar;
-
 }
 
-DVariable * DExpr::EvalPostfix(DStack * pftlist, int * pRetCd)
+DVariable * DExpr::EvalPostfix(DStack * pftlist)
 {
 	DVariable * vtt = NULL, *vop1 = NULL, *vop2 = NULL, *vrst = NULL;
 	int logic_res = true, res = true;
@@ -223,17 +229,17 @@ DVariable * DExpr::EvalPostfix(DStack * pftlist, int * pRetCd)
 		vtt = mystack->Pop();
 		if (mystack->m_errcd == SUCCESS)
 		{
-			*pRetCd = true;
 			delete mystack;
 			return vtt;
 		}
 	}
 
-	if (logic_res == 1)
-		logic_res = ERR_BADEXPR;
-
-	*pRetCd = logic_res;
 	delete mystack;
+
+	if (logic_res == 1) {
+		throw std::exception("Bad expression", ERR_BADEXPR);
+	}
+
 	return NULL;
 }
 

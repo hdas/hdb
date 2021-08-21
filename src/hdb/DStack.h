@@ -14,7 +14,7 @@
 class DStack
 {
 public:
-	int PopulatePostfix(std::vector<char*> &tokens, DStack * pftlist, int st, int lt, DTable ** paTable, int nTable);
+	int PopulatePostfix(std::vector<char*> &tokens, DStack * pftlist, int st, int lt, std::vector<DTable *> &paTable);
 	DVariable * Pop();
 	int Push(DVariable * pVar, BOOL bCopyVar = TRUE);
 	DStack();

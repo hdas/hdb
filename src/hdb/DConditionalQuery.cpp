@@ -10,8 +10,8 @@
 
 DConditionalQuery::DConditionalQuery(DSession *ssn, char * sql) : DQuery(ssn, sql)
 {
-	m_nTable = 0;
-	m_paTable = NULL;
+	//m_nTable = 0;
+	//m_paTable = NULL;
 
 	m_nWhereExpr = 0;
 	m_pWhereExpr = NULL;
@@ -26,18 +26,15 @@ DConditionalQuery::~DConditionalQuery()
 		m_pWhereExpr = NULL;
 	}
 
-	if (m_paTable != NULL)
+	for (i = 0; i < m_paTable.size(); i++)
 	{
-		for (i = 0; i < m_nTable; i++)
+		if (m_paTable[i] != NULL)
 		{
-			if (m_paTable[i] != NULL)
-			{
-				m_paTable[i]->Close();
-				delete m_paTable[i];
-			}
+			m_paTable[i]->Close();
+			delete m_paTable[i];
 		}
-		free(m_paTable);
 	}
+	m_paTable.clear();
 }
 
 //
@@ -66,13 +63,8 @@ int DConditionalQuery::ParseCondition(int st_where, int nd_where)
 			tmp_lt = tn;
 		}
 
-		m_pWhereExpr = new DExpr(m_paTable, m_nTable);
-		res = m_pWhereExpr->Create(m_tokens, st_where, tmp_lt);
-		if (res != SUCCESS)
-		{
-			m_errcd = res;
-			return m_errcd;
-		}
+		std:pair<short, short> range = { st_where, tmp_lt };
+		m_pWhereExpr = new DExpr(m_paTable, m_tokens, range);
 	}
 
 	return SUCCESS;
@@ -83,18 +75,27 @@ int DConditionalQuery::OpenTableList(int startTokenTable)
 	// Now opening the tables
 	int i;
 	int errcd = SUCCESS;
-	m_paTable = (DTable**)malloc(sizeof(DTable*) * m_nTable);
+	//m_paTable = (DTable**)malloc(sizeof(DTable*) * m_nTable);
 
 	// This is required; useful at destructor
 	// when one table has opened, but not another
-	for (i = 0; i < m_nTable; i++) m_paTable[i] = NULL;
+	//for (i = 0; i < m_nTable; i++) m_paTable[i] = NULL;
 
-	for (i = 0; i < m_nTable; i++)
+	for (i = startTokenTable; i < m_tokens.size(); i++)
 	{
-		m_paTable[i] = new DTable(m_ssn, m_stl[startTokenTable + (i * 2)]);
+		if (EQUAL(m_tokens[i], ",")) {
+			continue;
+		}
+		else if (EQUAL(m_tokens[i], "WHERE") || EQUAL(m_tokens[i], "ORDER") || EQUAL(m_tokens[i], "GROUP") //for select
+			|| EQUAL(m_tokens[i], "SET") // For Update
+			|| EQUAL(m_tokens[i], "VALUES") || EQUAL(m_tokens[i], "(") // For insert
+			|| EQUAL(m_tokens[i], ";")
+			) {
+			break;
+		}
 
-		int res = m_paTable[i]->Open();
-
+		auto table = new DTable(m_ssn, m_tokens[i]);
+		int res = table->Open();
 		if (res != SUCCESS)
 		{
 			errcd = ERR_BADTABLE;
@@ -102,6 +103,7 @@ int DConditionalQuery::OpenTableList(int startTokenTable)
 			this->m_ssn->SetLastError(pErr);
 			break;
 		}
+		m_paTable.push_back(table);
 	}
 
 	return errcd;

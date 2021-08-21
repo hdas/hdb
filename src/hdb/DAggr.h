@@ -19,7 +19,7 @@ class DAggr
 public:
 	int DestroyAggr();
 	char * ReleaseAggr(int * retcd);
-	int ProcessAggr(DTable ** paTable, int nTable);
+	int ProcessAggr(std::vector<DTable *> &paTable);
 	int CreateAggr(char * aggr_name, DExpr * the_expr_in_aggr, int * retcd);
 	DAggr();
 	virtual ~DAggr();

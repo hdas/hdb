@@ -24,12 +24,12 @@ int DUPDATEQuery::Parse()
 	int retcd = FAILURE;
 	// Determine the Number of Tables
 	st_var = 0;
-	m_nTable = 0;
+	int nTable = 0;
 	for (tn = 1; tn < m_nToken; tn++)
 	{
-		if (EQUAL(m_tokens[tn], "SET")){ m_nTable++; st_var = tn + 1; break; }
+		if (EQUAL(m_tokens[tn], "SET")){ nTable++; st_var = tn + 1; break; }
 		if (EQUAL(m_tokens[tn], "")) { m_errcd = ERR_BADSQL; return m_errcd; }
-		if (EQUAL(m_tokens[tn], ",")) m_nTable++;
+		if (EQUAL(m_tokens[tn], ",")) nTable++;
 	}
 
 	if (this->OpenTableList(1) != SUCCESS)
@@ -67,8 +67,7 @@ int DUPDATEQuery::Parse()
 	tn = next_var;
 	for (i = 0; i < m_nVarToSet; i++)
 	{
-		m_paVarToSet[i] = DVariable::CreateFieldVariable(m_tokens[next_var], m_paTable, m_nTable, &m_errcd);
-		if (m_errcd != SUCCESS) return m_errcd;
+		m_paVarToSet[i] = DVariable::CreateFieldVariable(m_tokens[next_var], m_paTable);
 
 		// Finding the Last Token of InExpr
 		for (tn = next_var + 2; tn < m_nToken; tn++)
@@ -80,13 +79,8 @@ int DUPDATEQuery::Parse()
 			}
 		}
 
-		m_paInExpr[i] = new DExpr(m_paTable, m_nTable);
-		retcd = m_paInExpr[i]->Create(m_tokens, next_var + 2, tmp_lt);
-		if (retcd != SUCCESS)
-		{
-			m_errcd = retcd;
-			return m_errcd;
-		}
+		std::pair<short, short> range = { next_var + 2, tmp_lt };
+		m_paInExpr[i] = new DExpr(m_paTable, m_tokens, range);
 		next_var = tn + 1;
 	}
 
@@ -111,7 +105,7 @@ int DUPDATEQuery::Execute()
 	for (i = 0; i < m_nInExpr; i++) Values[i] = NULL;
 
 	// Must be locked
-	for (i = 0; i < m_nTable; i++)
+	for (i = 0; i < m_paTable.size(); i++)
 	{
 		res = m_paTable[i]->Lock();
 		if (res < 0)
@@ -123,8 +117,7 @@ int DUPDATEQuery::Execute()
 	{
 		if (m_nWhereExpr != 0)
 		{
-			wcval = m_pWhereExpr->Evaluate(&retcd);
-			if (retcd < 0) HDB_RETURN(retcd);
+			wcval = m_pWhereExpr->Evaluate(m_paTable);
 			if (wcval->m_numval == 1) match = 1; else match = 0;
 		}
 		else match = 1;
@@ -133,8 +126,7 @@ int DUPDATEQuery::Execute()
 		{
 			for (ei = 0; ei < m_nVarToSet; ei++)
 			{
-				vtvar = m_paInExpr[ei]->Evaluate(&retcd);
-				if (retcd < 0) HDB_RETURN(retcd);
+				vtvar = m_paInExpr[ei]->Evaluate(m_paTable);
 
 				Values[ei] = vtvar->GetStringValue();
 				delete vtvar;
@@ -165,7 +157,7 @@ int DUPDATEQuery::Execute()
 
 CLEANUP:
 
-	for (i = 0; i < m_nTable; i++)
+	for (i = 0; i < m_paTable.size(); i++)
 	{
 		res = m_paTable[i]->Unlock();
 	}

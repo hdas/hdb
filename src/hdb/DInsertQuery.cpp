@@ -27,13 +27,13 @@ int DINSERTQuery::Parse()
 
 	// Determine the Number of Tables
 	st_vartoset = 0;
-	m_nTable = 0;
+	int nTable = 0;
 	for (tn = 2; tn < m_nToken; tn++)
 	{
-		if (EQUAL(m_stl[tn], "(")){ m_nTable++; st_vartoset = tn + 1; break; }
+		if (EQUAL(m_stl[tn], "(")){ nTable++; st_vartoset = tn + 1; break; }
 		if (EQUAL(m_stl[tn], "")) { m_errcd = ERR_BADSQL; return m_errcd; }
-		if (EQUAL(m_stl[tn], ",")) m_nTable++;
-		if (EQUAL(m_stl[tn], "VALUES")){ m_nTable++; st_val = tn + 2; break; }
+		if (EQUAL(m_stl[tn], ",")) nTable++;
+		if (EQUAL(m_stl[tn], "VALUES")){ nTable++; st_val = tn + 2; break; }
 	}
 
 	if (this->OpenTableList(2) != SUCCESS)
@@ -72,17 +72,14 @@ int DINSERTQuery::Parse()
 	{
 		for (i = 0; i < m_nVarToSet; i++)
 		{
-			m_paVarToSet[i] = DVariable::CreateFieldVariable(m_stl[st_vartoset + i * 2], m_paTable, m_nTable, &m_errcd);
-			if (m_errcd != SUCCESS) return m_errcd;
+			m_paVarToSet[i] = DVariable::CreateFieldVariable(m_tokens[st_vartoset + i * 2], m_paTable);
 		}
 	}
 	else
 	{
 		for (i = 0; i < m_nVarToSet; i++)
 		{
-			m_paVarToSet[i] = DVariable::CreateFieldVariable(m_paTable[0]->GetTagField(i)->m_field_name, m_paTable, m_nTable, &m_errcd);
-			if (m_errcd != SUCCESS)
-				return m_errcd;
+			m_paVarToSet[i] = DVariable::CreateFieldVariable(m_paTable[0]->GetTagField(i)->m_field_name, m_paTable);
 		}
 	}
 
@@ -103,12 +100,8 @@ int DINSERTQuery::Parse()
 				}
 			}
 
-			m_paInExpr[i] = new DExpr(m_paTable, m_nTable);
-			m_errcd = m_paInExpr[i]->Create(m_tokens, next_var, tmp_lt);
-			if (m_errcd != SUCCESS)
-			{
-				return m_errcd;
-			}
+			std::pair<short, short> range = {next_var, tmp_lt};
+			m_paInExpr[i] = new DExpr(m_paTable, m_tokens, range);
 			next_var = tn + 1;
 		}
 	}
@@ -140,7 +133,7 @@ int DINSERTQuery::Execute()
 	// Now restoring the values into the blank record
 	for (ei = 0; ei < m_nVarToSet; ei++)
 	{
-		vtvar = m_paInExpr[ei]->Evaluate(&retcd); // DVariable::eval_with_table(m_paInExpr[ei], m_paTable, m_nTable, &retcd);
+		vtvar = m_paInExpr[ei]->Evaluate(m_paTable); // DVariable::eval_with_table(m_paInExpr[ei], m_paTable, m_nTable, &retcd);
 		if (retcd < 0)
 		{
 			HDB_RETURN(retcd);

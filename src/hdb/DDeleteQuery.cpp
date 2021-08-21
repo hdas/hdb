@@ -34,12 +34,12 @@ int DDELETEQuery::Parse()
 	
 
 	// Determine the Number of Tables
-	m_nTable = 0;
+	int nTable = 0;
 	for (tn = 2; tn < m_nToken; tn++)
 	{
 		if (EQUAL(m_tokens[tn], "WHERE"))
 		{
-			m_nTable++;
+			nTable++;
 			st_where = tn + 1;
 			break;
 		}
@@ -48,8 +48,8 @@ int DDELETEQuery::Parse()
 			m_errcd = ERR_BADSQL;
 			return FALSE;
 		}
-		if (EQUAL(m_tokens[tn], ",")) m_nTable++;
-		if (EQUAL(m_tokens[tn], ";")){ m_nTable++; break; }
+		if (EQUAL(m_tokens[tn], ",")) nTable++;
+		if (EQUAL(m_tokens[tn], ";")){ nTable++; break; }
 	}
 
 	if (this->OpenTableList(2) == SUCCESS)
@@ -84,7 +84,7 @@ int DDELETEQuery::Execute()
 
 
 	// Must be locked
-	for (i = 0; i < m_nTable; i++)
+	for (i = 0; i < m_paTable.size(); i++)
 	{
 		res = m_paTable[i]->Lock();
 		if (res < 0) HDB_RETURN(res);
@@ -95,8 +95,7 @@ int DDELETEQuery::Execute()
 	{
 		if (m_nWhereExpr != 0)
 		{
-			wcval = m_pWhereExpr->Evaluate(&retcd);
-			if (retcd < 0) HDB_RETURN(retcd);
+			wcval = m_pWhereExpr->Evaluate(m_paTable);
 			match = (wcval->m_numval == 1);
 		}
 		else
@@ -113,7 +112,7 @@ int DDELETEQuery::Execute()
 	strcpy(m_result->m_errmsg, "Row Deleted");
 
 CLEANUP:
-	for (i = 0; i < m_nTable; i++)
+	for (i = 0; i < m_paTable.size(); i++)
 	{
 		res = m_paTable[i]->Unlock();
 	}
